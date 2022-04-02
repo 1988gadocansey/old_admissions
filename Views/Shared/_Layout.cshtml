@@ -1,0 +1,268 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{ var user = await UserManager.GetUserAsync(User); }
+<!doctype html>
+<!--[if lte IE 9]> <html class="lte-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no"/>
+
+    <link rel="icon" type="image/png" href="~/favicon.ico" sizes="16x16">
+    <link rel="icon" type="image/png" href="assets/img/favicon-32x32.png" sizes="32x32">
+
+    <title>@ViewData["Title"] - TTU Admissions</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <!-- uikit -->
+    <link rel="stylesheet" href="~/assets/plugins/uikit/css/uikit.almost-flat.min.css" media="all">
+
+
+    <link rel="stylesheet" href="~/assets/css/main.min.css" media="all">
+    <!-- <link rel="stylesheet" href="~/assets/css/combined.min.css" media="all"> -->
+    <!-- themes -->
+    <!--<link rel="stylesheet" href="~/assets/css/themes_combined.min.css" media="all">-->
+    <!-- font awesome -->
+    <link rel="stylesheet" href="~/assets/css/select2.min.css" media="all">
+    <link rel="stylesheet" href="~/assets/css/dropify.css" media="all">
+
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    @await RenderSectionAsync("Style", required: false)
+    <style>
+        .md-user-image {
+            width: 34px;
+            height: 45px;
+            border-radius: 50%;
+        }
+        #sidebar_main .sidebar_main_header {
+            height: 130px;
+            border-bottom: 1px solid rgba(0,0,0,.12);
+            margin-bottom: 20px;
+            background-color: rgb(253,243,3,1);
+            background-repeat: no-repeat;
+            background-position: 0 0;
+            position: relative
+        }
+        .menus{
+        background: #39f;
+            color: #fff;
+            margin-top: -20px;
+            height: 650px;
+        }
+    </style>
+</head>
+
+<body class=" sidebar_main_open sidebar_main_swipe">
+<!-- main header -->
+<header id="header_main">
+    <div class="header_main_content">
+        <nav class="uk-navbar">
+
+            <!-- main sidebar switch -->
+            <a href="#" id="sidebar_main_toggle" class="sSwitch sSwitch_left">
+                <span class="sSwitchIcon"></span>
+            </a>
+
+            <!-- secondary sidebar switch -->
+            <a href="#" id="sidebar_secondary_toggle" class="sSwitch sSwitch_right sidebar_secondary_check">
+                <span class="sSwitchIcon"></span>
+            </a>
+
+
+            <div class="uk-navbar-flip">
+
+                <ul class="uk-navbar-nav user_actions">
+
+                    <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="user_action_icon">
+                            <a>Hello @User.Identity.Name!</a>
+                        </li>
+                    }
+
+                    <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
+                        <a href="#" class="user_action_image">
+
+
+
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <img src="https://photos.ttuportal.com/public/albums/thumbnails/@(user.FormNo).jpg"
+                                     onerror="this.onerror = function my()
+    { return this.src = 'https://photos.ttuportal.com/public/albums/thumbnails/@(user.FormNo).jpeg'; };
+    this.src = 'https://photos.ttuportal.com/public/albums/thumbnails/@(user.FormNo).JPG';"
+                                     class="md-user-image"
+                                     asp-append-version="true"/>
+                            }
+                        </a>
+
+                        <div class="uk-dropdown uk-dropdown-small">
+                            <ul class="uk-nav js-uk-prevent">
+                                @*<li><a href="page_user_profile.html">My profile</a></li>
+                                            <li><a href="page_settings.html">Settings</a></li>*@
+
+
+                                @*<li>  <a class="nav-link text-dark" asp-area="Identity" asp-controller="Account" asp-action="Logout">Sign out</a></li>*@
+
+                                <li>
+                                    <a asp-area="" asp-controller="Upload" asp-action="Index">Profile Picture</a>
+                                </li>
+                                <li>
+
+
+                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })"
+                                       onclick="event.preventDefault();
+                                                 document.getElementById('logout-form').submit();">
+                                        Logout
+                                    </a>
+
+                                    <form id="logout-form" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="POST" style="display: none;">
+                                        @Html.AntiForgeryToken()
+                                    </form>
+
+                                </li>
+
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <div class="header_main_search_form">
+        <i class="md-icon header_main_search_close material-icons">&#xE5CD;</i>
+        <form class="uk-form">
+            <input type="text" class="header_main_search_input"/>
+            <button class="header_main_search_btn uk-button-link">
+                <i class="md-icon material-icons">&#xE8B6;</i>
+            </button>
+        </form>
+    </div>
+</header><!-- main header end -->
+<!-- main sidebar -->
+<aside id="sidebar_main">
+
+    <div class="sidebar_main_header">
+
+
+        <center>
+            <img style="width:100px" src="~/img/ttu.png" alt="logo"/>
+        </center>
+        <div style="color: rgb(26,52,126,1);margin-top: -6px">
+            <center>TTU | Admissions</center>
+        </div>
+
+    </div>
+    <div class="menus">
+        <div class="menu_section">
+
+            <partial name="_MenuBar"/>
+
+        </div>
+    </div>
+</aside><!-- main sidebar end -->
+
+<div id="page_content">
+    <div id="page_content_inner">
+
+        @RenderBody()
+
+    </div>
+</div>
+
+
+<!-- google web fonts -->
+<script>WebFontConfig = {
+                google: {
+                    families: [
+                        'Source+Code+Pro:400,700:latin',
+                        'Roboto:400,300,500,700,400italic:latin'
+                    ]
+                }
+            };
+            (function () {
+                var wf = document.createElement('script');
+                wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+                    '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+                wf.type = 'text/javascript';
+                wf.async = 'true';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(wf, s);
+            })();</script>
+
+<script src="~/assets/js/common.min.js"></script>
+
+<!-- uikit functions -->
+<script src="~/assets/js/uikit_custom.min.js"></script>
+
+<!-- altair common functions/helpers -->
+<script src="~/assets/js/altair_admin_common.min.js"></script>
+
+
+<script src="~/assets/js/dropify.min.js"></script>
+<script src="~/assets/js/file_input.min.js"></script>
+
+<script src="~/assets/js/vue.min.js"></script>
+<script src="~/assets/js/vue-form.min.js"></script>
+<script src="~/assets/js/jquery-ui.min.js"></script>
+
+<script src="~/assets/js/jquery.base64.js"></script>
+
+
+<script src="https://altair-html.tzdthemes.com/bower_components/jquery.inputmask/dist/jquery.inputmask.bundle.js"></script>
+
+@await RenderSectionAsync("Scripts", required: false)
+<script>$(document).ready(function () {
+
+                $(".uk-alert-success").fadeOut(2500);
+                $(".uk-alert-danger").fadeOut(2500);
+
+            });</script>
+
+
+<script>$(document).ready(function () {
+                // console.log($('select[name="status"]'));
+                $('select[name="status"]').on('change', function (e) {
+                    var newval = $(this).val();
+                    var status_id = $(this).attr("status_id");
+                    var name = $(this).attr("name");
+                    var phone = $(this).attr("phone");
+                    UIkit.modal.confirm('Update status of order?', function () {
+                        $.post("updatestatus/" + status_id, { "newval": newval }, function (data, status) {
+                            if (data == "success") {
+
+                                UIkit.notify({
+                                    message: 'Status Updated!',
+                                    status: 'success',
+                                    timeout: 8000,
+                                    pos: 'top-center'
+                                });
+
+                            }
+                            else {
+                                UIkit.notify('My message');
+                                UIkit.notify({
+                                    message: 'Error updating status of order!',
+                                    status: 'danger',
+                                    timeout: 10000,
+                                    pos: 'top-center'
+                                });
+
+                            }
+                        });
+                    });
+                });
+            });</script>
+
+
+</body>
+</html>

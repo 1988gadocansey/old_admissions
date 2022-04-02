@@ -1,0 +1,155 @@
+﻿
+@using Microsoft.AspNetCore.Identity
+@using Humanizer
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{ var user = await UserManager.GetUserAsync(User); }
+
+<div class="uk-grid uk-grid-width-large-1-4 uk-grid-width-medium-1-2 uk-grid-medium uk-sortable sortable-handler hierarchical_show" data-uk-sortable data-uk-grid-margin>
+
+    <div>
+        <div class="md-card">
+            <div class="md-card-content">
+                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="peity_sale peity_data">5,3,9,6,5,9,7,3,5,2</span></div>
+                <span class="uk-text-muted uk-text-small">Last Login</span>
+                <h4 class="uk-margin-remove"><span class="countUpMe" style="text-transform:capitalize">  @(user.LastLogin.Humanize())</span></h4>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="md-card">
+            <div class="md-card-content">
+                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="peity_visitors peity_data">5,3,9,6,5,9,7</span></div>
+                <span class="uk-text-muted uk-text-small">Form No.</span>
+                <h4 class="uk-margin-remove">
+                    <span class="countUpMew">
+
+                         @(user.FormNo ) -  @(user.Type )
+
+
+
+                    </span>
+                </h4>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="md-card">
+            <div class="md-card-content">
+                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="peity_orders peity_data">64/100</span></div>
+                <span class="uk-text-muted uk-text-small">Picture Upload</span>
+
+
+
+
+                @if ((user.PictureUploaded) == 1)
+                {
+
+                    <h4 class="uk-margin-remove"><span class="countUpMe">Yes</span></h4>
+
+                }
+                else
+                {
+                    <h4 class="uk-margin-remove"><span class="countUpMe">No</span></h4>
+                }
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="md-card">
+            <div class="md-card-content">
+                <div class="uk-float-right uk-margin-top uk-margin-small-right"><span class="peity_live peity_data">5,3,9,6,5,9,7,3,5,2,5,3,9,6,5,9,7,3,5,2</span></div>
+                <span class="uk-text-muted uk-text-small">Form Completed</span>
+
+
+                @if ((user.FormCompleted) == 1)
+                {
+
+                    <h4 class="uk-margin-remove" id="peity_live_text">
+                        Yes.
+                    </h4>
+
+                }
+                else
+                {
+                    <h4 class="uk-margin-remove" id="peity_live_text">
+                        No.
+                    </h4>
+                }
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="uk-grid">
+    <div class="uk-width-1-1">
+        <div class="md-card">
+
+            <div class="md-card-content">
+
+                <p><center><strong>INSTRUCTIONS IN FILLING THE FORM </strong></center></p>
+                <hr>
+                <p>All Ghanaian applicants for the  @DateTime.Now.Year/@DateTime.Now.AddYears(+1).Year Academic year admission are required to use Takoradi Technical University online admission portal.<br /> The procedure for the online application process is as follows:</p>
+
+                <p><strong>I</strong>. In completing the online form, applicants will be required to upload their passport size photograph (not more than 250KB) with a white background.</p>
+                <p><strong>II. </strong>Applicants are advised to check thoroughly all details entered before they finally submit their online applications. A form, once submitted, can be viewed, but cannot be edited.</p>
+                <p><strong>III.</strong> Applicants should print out application form; attach result slips, certificates  and all other relevant documents.</p>
+                <p><strong>IV. </strong>The application documents as specified (III) above should sent by post to
+
+                <p align="center"><strong>The Registrar</strong></p>
+                <p align="center"><strong>Takoradi Technical University</strong></p>
+                <p align="center"><strong>P. O Box 256, Takoradi, W/R.</strong></p>
+
+                <center><p><strong>For more information call 0508333992 / 0553777777 / 0243348522 / 0508335033</strong></p></center>
+                &nbsp;
+                <div class="form-actions" data-qa-continue="">
+                    <center>
+                        <table align="center">
+
+                            <tr>
+                                <td>
+                                    @if ((user.PictureUploaded) == 1)
+                                    {
+
+                                        <a class="md-btn   md-btn-primary uk-margin-small-top" asp-area="" asp-controller="Form" asp-action="Create">Start Application</a>
+
+
+                                    }
+                                    else
+                                    {
+
+                                        <a class="md-btn   md-btn-primary uk-margin-small-top" asp-area="" asp-controller="Upload" asp-action="Index">Upload Picture</a>
+
+                                    }
+                                    @if ((user.Finalized) == 1)
+                                    {
+
+                                        <a class="md-btn   md-btn-primary uk-margin-small-top" asp-area="" asp-controller="Preview" asp-action="Index">Preview Form</a>
+
+                                    }
+
+                                </td>
+                            </tr>
+                        </table>
+
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

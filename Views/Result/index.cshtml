@@ -1,0 +1,407 @@
+﻿
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model IEnumerable<TTU_CORE_ASP_ADMISSION_PORTAL.Models.ResultUploadModel>
+@{
+    ViewBag.Title = "Upload Results";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 0;
+
+
+}
+@section Style{
+    <script src="~/assets/js/jquery.min.js"></script>
+
+    <script src="~/assets/js/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="~/assets/css/jquery-ui.css" media="all">
+    <style>
+        input[type=text] {
+            padding: 8px;
+            margin: 8px 0;
+            width: 100px
+        }
+
+        select {
+            width: 100px;
+            padding: 10px;
+            border-radius: 10px;
+        }
+    </style>
+}
+
+@if (TempData["message"] != null)
+{
+
+    @if (TempData["type"].ToString() == "success")
+    {
+        <div style="text-align: center" class="uk-alert uk-alert-success" data-uk-alert=""> @TempData["message"]  </div>
+
+    }
+    else
+    {
+
+        <div style="text-align: center" class="uk-alert uk-alert-danger" data-uk-alert=""> @TempData["message"]  </div>
+
+    }
+     
+}
+
+
+
+
+<div align="center">
+    @{ var user = await UserManager.GetUserAsync(User); }
+
+
+
+
+
+    <div class="uk-grid">
+        <div class="uk-width-1-1">
+            <div class="md-card">
+
+                <div class="md-card-content">
+
+                    <div class="col s12">
+                        <div class="page-title  text-success"><small class="">Upload Exams Results here</small></div>
+                    </div>
+                    <form id="form" method="post" enctype="multipart/form-data" asp-controller="Result" asp-action="SaveAysnc" accept-charset="utf-8" name="applicationForm" v-form>
+                        @Html.AntiForgeryToken()
+
+                         
+                            <div class="col s12 m12 l12">
+                                <div class="card hoverable">
+                                    <table id="paymentTable" class="uk-table" border="0" style="font-weight:bold">
+                                        <tr id="paymentRow" payment_row="payment_row">
+
+                                            <td valign="top">
+
+                                                Index No. &nbsp;
+
+                                                <input type="text" id="indexno" required="" name="items[indexno]"  v-model='indexno' v-form-ctrl=''  >
+
+                                            </td>
+
+                                            <td>
+                                                Center &nbsp;
+                                                <input type="text" id="center" required="" name="items[center]"  v-model='center' v-form-ctrl=''>
+
+
+                                            </td>
+
+
+                                            <td valign="top">
+                                                Exam Type &nbsp;
+                                                <select name="items[type]" class="md-input"  required="required" v-model="type" v-form-ctrl="" v-select="type" asp-items="@ViewBag.types">
+                                                    <option value="">Select</option>
+
+
+
+
+                                                </select>
+                                            </td>
+
+
+                                            <td valign="top">
+                                                Subject &nbsp;
+                                                <select name="items[subject]" class="md-input" required="required" v-model="subject" v-form-ctrl="" v-select="subject" asp-items="@ViewBag.subjects">
+                                                    <option value="">Select</option>
+
+
+
+
+                                                </select>
+                                            </td>
+
+                                            <td valign="top">
+                                                Grades &nbsp;
+                                                <select name="items[grade]" class="md-input" required="required" v-model="grade" v-form-ctrl="" v-select="grade" asp-items="@ViewBag.grades">
+                                                    <option value="">Select</option>
+
+
+
+
+                                                </select>
+                                            </td>
+
+
+                                            <td valign="top">
+                                                Sitting &nbsp;
+
+                                                <select name="items[sitting]" class="md-input" required="required" v-model="sitting" v-form-ctrl="" v-select="sitting">
+                                                    <option value="">Select</option>
+                                                    <option value="1">Ist</option>
+                                                    <option value="2">2nd</option>
+                                                    <option value="3">3rd</option>
+                                                    <option value="4">4th</option>
+
+
+
+                                                </select>
+                                            </td>
+
+                                            <td>
+                                                Month &nbsp;
+                                                <select name="items[month]" class="md-input" required="required" v-model="month" v-form-ctrl="" v-select="month">
+                                                    <option value="">Select</option>
+                                                    <option value="May/June">May/June</option>
+                                                    <option value="Nov/Dec">Nov/Dec</option>
+                                                    <option value="December">December</option>
+                                                    <option value="March">March</option>
+                                                    <option value="May">May</option>
+                                                    <option value="June">June</option>
+                                                    <option value="September">September</option>
+                                                    <option value="Other">Other</option>
+
+
+
+                                                </select>
+                                            </td>
+                                            <td>
+                                                Year &nbsp;
+                                                <select name="items[year]" class="md-input" required="required" v-model="year" v-form-ctrl="" v-select="year">
+                                                    <option value="">Select</option>
+
+                                                    @foreach (int years in @ViewBag.years)
+                                        {
+                                    <option value="@years">@years</option>
+                                        }
+                                                    
+
+                                                </select>
+                                            </td>
+
+                                            <td valign="top" id="insertPaymentCell"><button type="button" id="insertPaymentRow" class="waves-effect waves-light btn blue m-b-xs btn-sm" title="click to add more grades"><i class="sidebar-menu-icon material-icons">add</i></button></td>
+
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <center>
+                                    <table>
+
+                                        <tr>
+                                            <td>
+                                                <input class="md-btn md-btn-success uk-margin-small-top" id="save" type="submit" name="submit_order"  v-on:click="submit_form" value="Submit" v-show="applicationForm.$valid"/>
+                                                
+                                                <input type="reset" value="Clear" class="md-btn   md-btn-danger uk-margin-small-top">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </center>
+                            </div>
+
+                        </form>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <div class="page-title  text-success"><small class="">Uploaded Results</small></div>
+                    </div>
+                    <div class="col s12 m12 l12">
+                        <div class="card hoverable">
+                            <div class="col s12 m12 l12">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <table class="uk-table uk-table-nowrap table_check">
+                                            <thead>
+                                                <tr>
+                                                    <th data-field="id">NO</th>
+                                                    <th data-field="price">INDEXNO</th>
+                                                    <th data-field="name">SUBJECT</th>
+                                                    <th data-field="price">GRADE</th>
+                                                    <th data-field="price">VALUE</th>
+                                                    <th data-field="price">EXAM TYPE</th>
+                                                    <th data-field="price">SITTING</th>
+                                                    <th data-field="price">MONTH OF EXAM</th>
+                                                    <th data-field="price">YEAR</th>
+                                                    <th data-field="price">CENTER</th>
+                                                    <th style="text-align: center">ACTION</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+
+                                                @if (ViewBag.results != null) {
+
+                                                    @foreach (var result in ViewBag.results) {
+                                                <tr align="">
+                                                    <td>@result.Id</td>
+                                                    <td> @result.IndexNo</td>
+                                                    <td> @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(@result.Subject.Name)</td>
+                                                    <td> @result.Grade.Name</td>
+                                                    <td>  @result.Grade.Value</td>
+                                                    <td>  @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(@result.ExamType)</td>
+                                                    <td> @result.Sitting</td>
+                                                    <td>  @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(@result.Month)</td>
+                                                    <td> @result.Year</td>
+
+
+                                                    <td>  @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(@result.Center)</td>
+
+
+
+                                                    <td style="text-align: center">
+
+
+                                                        <a onclick="return confirm('Are you sure you want to delete @result.Subject.Name?')" title="delete result" class="md-btn  md-btn-danger md-btn-small   md-btn-wave-light waves-effect waves-button waves-light" asp-action="Delete" asp-route-id="@result.Id"><i class="sidebar-menu-icon material-icons md-18">delete</i></a>
+                                                    </td>
+                                                </tr>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <tr><td>No result(s) uploaded....</td></tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+
+                                        <div class="uk-text-danger"><center>
+    @*Total Aggregate:
+
+
+    @if (ViewBag.grade!=null)
+    {
+        @ViewBag.grade
+    }
+    else
+    {
+         <p>Results not completed.</p>
+    }*@
+
+</center></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts{
+
+    <script>$(document).ready(function () {
+            $("select").addClass('browser-default'),
+                function checkFormElements() { }
+            $("#insertPaymentRow").bind('click', function () {
+                var numOrgs = $(" table#paymentTable tr[payment_row]").length + 1;
+                var newOrg = $("table#paymentTable tr:first ").clone(true);
+                $(newOrg).children(' td#insertPaymentCell ').html('<button  type="button" id="removePaymentRow_' + numOrgs + '"  title="click to delete grade" class="waves-effect waves-light btn orange m-b-xs btn-sm" ><i class="material-icons">remove</i></button>');
+                var amountLine = $(newOrg).children('td')[2];
+                $(amountLine).children(':last-child').prop('value', '');
+                var amountInput = $(amountLine).children(':last-child');
+                $(amountInput).prop('id', 'amt_' + numOrgs);
+                $(newOrg).attr('id', 'paymentRow_' + numOrgs);
+                $(newOrg).insertAfter($("table#paymentTable tr:last"));
+                $('#removePaymentRow_' + numOrgs).bind("click", function () {
+                    // $(amountInput).trigger('keyup');
+                    $('#paymentRow_' + numOrgs).remove();
+                    var count = 0;
+                });
+                // $('#amt_'+numOrgs).bind('focus',function(){
+                //   console.log('hello from here');
+                // });
+                //});
+                $('#paymentTable .pay_type  :selected').parent().each(function () {
+                    if ($(this).prop('selectedIndex') <= 0) {
+                        //$('#new_payment_individual_form :submit').prop('disabled','disabled');
+                        //  $('#alertInfo').css('display','block').html("Please select a payment type!");
+                    }
+                });
+                //console.log($(this).prop('name')+"->"+$('#paymentTable .pay_type  :selected').parent().length);
+            });
+    $('#save').on('click', function (e) {
+       return validate();
+               // return (function (modal) { modal = alert("Are you sure you want to submit your results......."); setTimeout(function () { modal.hide() }, 50000) })();
+            });
+        });</script>
+
+    @*<script src="~/assets/js/select2.full.min.js"></script>
+        <script>$(document).ready(function () {
+                $('select').select2({ width: "resolve" });
+
+
+            });</script>*@
+
+    <script>//code for ensuring vuejs can work with select2 select boxes
+        @*Vue.directive('select', {
+            twoWay: true,
+            priority: 1000,
+            params: ['options'],
+            bind: function () {
+                var self = this
+                $(this.el)
+                    .select2({
+                        data: this.params.options,
+                        width: "resolve"
+                    })
+                    .on('change', function () {
+                        self.vm.$set(this.name, this.value)
+                        Vue.set(self.vm.$data, this.name, this.value)
+                    })
+            },
+            update: function (newValue, oldValue) {
+                $(this.el).val(newValue).trigger('change')
+            },
+            unbind: function () {
+                $(this.el).off().select2('destroy')
+            }
+        })*@
+
+
+        var vm = new Vue({
+            el: "body",
+            ready: function () {
+            },
+            data: {
+
+
+                options: []
+
+            },
+            methods: {
+                
+                submit_form: function () {
+                    return (function (modal) { modal = UIkit.modal.blockUI("<div class='uk-text-center'>Saving Result(s)...<br/><img class='uk-thumbnail uk-margin-top' src='https://apply.ttuportal.com/assets/img/spinners/spinner_success.gif' /></div>"); setTimeout(function () { modal.hide() }, 50000) })();
+                },
+
+               
+            }
+
+        })</script>
+
+    <script script="text/javascript">
+        function validate() {
+            var grade = Document.getElementById("grade");
+            var year = Document.getElementById("year");
+            var subject = Document.getElementById("subject");
+            var indexno = Document.getElementById("indexno");
+            var center = Document.getElementById("center");
+            var type = Document.getElementById("type");
+            var month = Document.getElementById("month");
+            var sitting = Document.getElementById("sitting");
+
+            if (grade == "" || year == "" || subject == "" || indexno == "" || center == "" || type == "" || month == "" || sitting == "") {
+                alert("Please fill all fields.");
+            }
+        }
+
+    </script>
+}
+
