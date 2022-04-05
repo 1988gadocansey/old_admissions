@@ -84,22 +84,19 @@ namespace TTU_CORE_ASP_ADMISSION_PORTAL.Controllers
                                         using var image = Image.Load(file.OpenReadStream());
 
                                         image.Mutate(img => img.AutoOrient());
-                                        image.Mutate(x => x.Resize(413, 531));
+                                        image.Mutate(x => x.Resize(413, 413));
 
                                
                                       try
                                         {
-                                   
-                                            /**
-                                             * Call the image background service from the ttuportal.com/api/image/check to help test
-                                             **/
+                                            
 
                                             image.Save(filePath);
 
-                            int port = Convert.ToInt32(Configuration["sftpport"]);
-                            string host = Configuration["sftphost"];
-                            string username = Configuration["sftpusername"];
-                            string password = Configuration["sftppassword"];
+                            var port = Convert.ToInt32(Configuration["sftpport"]);
+                            var host = Configuration["sftphost"];
+                            var username = Configuration["sftpusername"];
+                            var password = Configuration["sftppassword"];
                             if (_helper.SendFileToServer(host, port, username, password, filePath) == 1)
                             {
                                 var fileInfo = new FileInfo(filePath);

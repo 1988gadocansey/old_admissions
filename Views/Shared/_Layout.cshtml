@@ -36,9 +36,35 @@
 
     @await RenderSectionAsync("Style", required: false)
     <style>
+    .material-icons {
+        font-family: 'Material Icons';
+        font-weight: 400;
+        font-style: normal;
+        font-size: 18px;
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        line-height: 1;
+        text-transform: none;
+        letter-spacing: normal;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        -moz-osx-font-smoothing: grayscale;
+        font-feature-settings: 'liga';
+        vertical-align: -4px;
+        color: white;
+    }
+    #sidebar_main .menu_section>ul>li>a {
+        font: 500 14px/25px Roboto,sans-serif;
+        color: white;
+        padding: 8px 20px;
+        display: block;
+        overflow: hidden;
+        position: relative;
+    }
         .md-user-image {
             width: 34px;
-            height: 45px;
+            height: 34px;
             border-radius: 50%;
         }
         #sidebar_main .sidebar_main_header {
@@ -51,10 +77,11 @@
             position: relative
         }
         .menus{
-        background: #39f;
+        background: #1a347e;
             color: #fff;
             margin-top: -20px;
-            height: 650px;
+            height: 610px;
+            overflow: hidden;
         }
     </style>
 </head>

@@ -11367,15 +11367,9 @@
       "packagesPath": "/Users/gadocansey/.nuget/packages/",
       "outputPath": "/Applications/www/TTU_CORE_ASP_ADMISSION_PORTAL/obj/",
       "projectStyle": "PackageReference",
-      "configFilePaths": [
-        "/Users/gadocansey/.nuget/NuGet/NuGet.Config"
-      ],
       "originalTargetFrameworks": [
         "net5.0"
       ],
-      "sources": {
-        "https://api.nuget.org/v3/index.json": {}
-      },
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
